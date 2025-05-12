@@ -10,7 +10,7 @@ te_path = 'data/football_data/combined_te_football_game_logs.csv'
 fb_path = 'data/football_data/combined_fb_football_game_logs.csv'
 
 # Load the data
-schedule_df = pd.read_csv(schedule_path, parse_dates=['DATE'], dayfirst=False)
+schedule_df = pd.read_csv(schedule_path, parse_dates=['Date'], dayfirst=False)
 qb_df = pd.read_csv(qb_path)
 rb_df = pd.read_csv(rb_path)
 wr_df = pd.read_csv(wr_path)
