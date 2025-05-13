@@ -29,23 +29,23 @@ position = st.sidebar.radio("Select Player Position", ['QB', 'RB', 'WR', 'TE', '
 # Select appropriate dataframe and stats based on position
 if position == 'QB':
     df = qb_df
-    stats = ['YDS', 'TD', 'INT', 'CMP', 'ATT']  # Example stats for QB
+    stats = ['Yds', 'TD', 'Int', 'Cmp', 'Attempts']  # Adjusted QB stat names
     stat_names = ['Passing Yards', 'Touchdowns', 'Interceptions', 'Completions', 'Attempts']
 elif position == 'RB':
     df = rb_df
-    stats = ['YDS', 'TD', 'ATT']  # Example stats for RB
+    stats = ['Yds', 'TD', 'Att']
     stat_names = ['Rushing Yards', 'Touchdowns', 'Carries']
 elif position == 'WR':
     df = wr_df
-    stats = ['YDS', 'TD', 'REC', 'TGT']  # Example stats for WR
+    stats = ['Yds', 'TD', 'Rec', 'Tgt']
     stat_names = ['Receiving Yards', 'Touchdowns', 'Receptions', 'Targets']
 elif position == 'TE':
     df = te_df
-    stats = ['YDS', 'TD', 'REC', 'TGT']  # Example stats for TE
+    stats = ['Yds', 'TD', 'Rec', 'Tgt']
     stat_names = ['Receiving Yards', 'Touchdowns', 'Receptions', 'Targets']
 else:
     df = fb_df
-    stats = ['YDS', 'TD', 'ATT']  # Example stats for FB
+    stats = ['Yds', 'TD', 'Att']
     stat_names = ['Rushing Yards', 'Touchdowns', 'Carries']
 
 # Sidebar: player and stat selection
