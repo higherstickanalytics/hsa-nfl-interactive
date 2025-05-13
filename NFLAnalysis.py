@@ -4,73 +4,57 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 # File paths
-schedule_path = 'data/NFL_Schedule.csv'
-qb_path = 'data/football_data/combined_qb_football_game_logs.csv'
-rb_path = 'data/football_data/combined_rb_football_game_logs.csv'
-wr_path = 'data/football_data/combined_wr_football_game_logs.csv'
-te_path = 'data/football_data/combined_te_football_game_logs.csv'
-fb_path = 'data/football_data/combined_fb_football_game_logs.csv'
+hitters_path = 'data/baseball_data/combined_hitters_data.csv'
+pitchers_path = 'data/baseball_data/combined_pitchers_data.csv'
+schedule_path = 'data/MLB_Schedule.csv'
 
 # Load data
+hitters_df = pd.read_csv(hitters_path)
+pitchers_df = pd.read_csv(pitchers_path)
 schedule_df = pd.read_csv(schedule_path, parse_dates=['Date'], dayfirst=False)
-qb_df = pd.read_csv(qb_path)
-rb_df = pd.read_csv(rb_path)
-wr_df = pd.read_csv(wr_path)
-te_df = pd.read_csv(te_path)
-fb_df = pd.read_csv(fb_path)
 
 # App title
-st.title("Football Data Viewer with Pie and Time-Series Charts")
-st.write("Data from [NFL](https://www.pro-football-reference.com/)")
+st.title("MLB Data Viewer with Pie and Time-Series Charts")
+st.write("Data sourced from MLB game logs and schedules")
 
-# Sidebar: select position
-position = st.sidebar.radio("Select Player Position", ['QB', 'RB', 'WR', 'TE', 'FB'])
+# Sidebar: select player type
+player_type = st.sidebar.radio("Select Player Type", ['Hitter', 'Pitcher'])
 
-# Define stat mappings for each position
+# Stat mappings
 stat_map = {
-    'QB': {
-        'Passing Yards': 'Yds',
-        'Touchdowns': 'TD',
-        'Interceptions': 'Int',
-        'Completions': 'Cmp',
-        'Attempts': 'Attempts'
+    'Hitter': {
+        'Home Runs': 'HR',
+        'Runs Batted In': 'RBI',
+        'Hits': 'H',
+        'Batting Average': 'BA',
+        'Strikeouts': 'SO',
+        'Walks': 'BB',
+        'Stolen Bases': 'SB'
     },
-    'RB': {
-        'Rushing Yards': 'Yds',
-        'Touchdowns': 'TD',
-        'Carries': 'Attempts'
-    },
-    'WR': {
-        'Receiving Yards': 'Yds',
-        'Touchdowns': 'TD',
-        'Receptions': 'Rec',
-        'Targets': 'Tgt'
-    },
-    'TE': {
-        'Receiving Yards': 'Yds',
-        'Touchdowns': 'TD',
-        'Receptions': 'Rec',
-        'Targets': 'Tgt'
-    },
-    'FB': {
-        'Rushing Yards': 'Yds',
-        'Touchdowns': 'TD',
-        'Carries': 'Attempts'
+    'Pitcher': {
+        'Earned Run Average': 'ERA',
+        'Strikeouts': 'SO',
+        'Walks': 'BB',
+        'Innings Pitched': 'IP',
+        'Hits Allowed': 'H',
+        'Home Runs Allowed': 'HR',
+        'WHIP': 'WHIP'
     }
 }
 
 # Assign dataframe and stats
-df = {'QB': qb_df, 'RB': rb_df, 'WR': wr_df, 'TE': te_df, 'FB': fb_df}[position]
-stat_options = list(stat_map[position].keys())
-selected_stat_display = st.sidebar.selectbox("Select a statistic:", stat_options)
-selected_stat = stat_map[position][selected_stat_display]
+df = hitters_df if player_type == 'Hitter' else pitchers_df
+df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
 
-# Sidebar: player selection
+stat_options = list(stat_map[player_type].keys())
+selected_stat_display = st.sidebar.selectbox("Select a statistic:", stat_options)
+selected_stat = stat_map[player_type][selected_stat_display]
+
+# Player selection
 player_list = df['Player'].dropna().unique().tolist()
 selected_player = st.sidebar.selectbox("Select a player:", sorted(player_list))
 
-# Sidebar: date filter
-df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+# Date filter
 min_date = df['Date'].min()
 max_date = df['Date'].max()
 start_date = pd.to_datetime(st.sidebar.date_input("Start Date", min_value=min_date, value=min_date))
@@ -107,8 +91,7 @@ for val, count in zip(stat_counts.index, stat_counts.values):
         color_categories['gray'] += count
 
 fig1, ax1 = plt.subplots()
-wedges, texts, autotexts = ax1.pie(sizes, labels=labels, autopct='%1.1f%%',
-                                   startangle=140, colors=colors, textprops={'fontsize': 10})
+ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors, textprops={'fontsize': 10})
 ax1.axis('equal')
 ax1.set_title(f"{selected_stat_display} Value Distribution")
 st.pyplot(fig1)
