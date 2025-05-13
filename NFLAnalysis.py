@@ -21,7 +21,7 @@ fb_df = pd.read_csv(fb_path)
 
 # App title
 st.title("Football Data Viewer with Pie and Time-Series Charts")
-st.write("Data from [NFL](https://www.nfl.com/)")
+st.write("Data from [NFL](https://www.pro-football-reference.com/)")
 
 # Sidebar: select position
 position = st.sidebar.radio("Select Player Position", ['QB', 'RB', 'WR', 'TE', 'FB'])
